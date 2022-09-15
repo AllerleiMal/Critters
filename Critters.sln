@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32630.192
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Critters", "Critters\Critters.csproj", "{84C34F0C-5DF5-498C-85BF-1290782CD0FA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{84C34F0C-5DF5-498C-85BF-1290782CD0FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84C34F0C-5DF5-498C-85BF-1290782CD0FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84C34F0C-5DF5-498C-85BF-1290782CD0FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84C34F0C-5DF5-498C-85BF-1290782CD0FA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {19AC7248-A7B0-41E3-B2EF-6D6DD9B1E442}
+	EndGlobalSection
+EndGlobal
