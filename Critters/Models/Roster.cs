@@ -3,11 +3,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Critters.Models
 {
-    [Table("roster")]
+    [Table("dbo.roster")]
     public class Roster
     {
         [Key]
-        [Required]
         public string playerid;
         public string jersey;
         public string fname;

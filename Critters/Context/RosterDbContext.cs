@@ -10,5 +10,12 @@ namespace Critters.Context
 
         public DbSet<Roster> Rosters { set; get; }
 
+       /* protected override void OnConfiguring(DbContextOptionsBuilder builder)
+        {
+            builder.UseSqlServer("Data Source=NIZIER\\NIKITADB;Initial Catalog=Critters;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+            base.OnConfiguring(builder);
+
+        }*/
     }
+
 }

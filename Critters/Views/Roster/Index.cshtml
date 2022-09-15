@@ -1,0 +1,35 @@
+﻿@model IEnumerable<Roster>
+
+<table>
+  <tr>
+    <th>Player Id</th>
+    <th>Jersey</th>
+    <th>First name</th>
+    <th>Second name</th>
+     <th>Position</th>
+     <th>Birthday</th>
+    <th>Weight</th>
+    <th>Height</th>
+    <th>Birth city</th>
+    <th>Birth state</th>
+  </tr>
+    @{
+        foreach(Roster roster in Model)
+        {
+            <tr>
+             <td>@roster.playerid</td>
+             <td>@roster.jersey</td>
+             <td>@roster.fname</td>
+             <td>@roster.sname</td>
+              <td>@roster.position</td>
+             <td>@roster.birthday</td>
+             <td>@roster.weight</td>
+              <td>@roster.height</td>
+             <td>@roster.birthcity</td>
+             <td>@roster.birthstate</td>
+            </tr>
+        }
+    }
+</table>
+
+
