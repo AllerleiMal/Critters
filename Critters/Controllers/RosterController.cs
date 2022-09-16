@@ -17,12 +17,7 @@ namespace Critters.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            List<Roster> rosters = await _context.Rosters.Select(r => new Roster{
-                playerid = r.playerid,
-                fname = r.fname,
-                }).ToListAsync();
-            ViewBag.rosters = rosters;
-            return View(rosters);
+            return View(await _context.Rosters.ToListAsync());
         }
     }
 }

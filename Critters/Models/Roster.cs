@@ -8,15 +8,16 @@ namespace Critters.Models
     {
         [Key]
         [Required]
-        public string playerid;
-        public int? jersey;
-        public string fname;
-        public string sname;
-        public string position;
-        public DateTime birthday;
-        public int? weight;
-        public int? height;
-        public string birthcity;
-        public string birthstate;
+        public string playerid { get; set; }
+
+        public int? jersey{ get; set; }
+        public string fname{ get; set; }
+        public string sname{ get; set; }
+        public string position{ get; set; }
+        public DateTime birthday{ get; set; }
+        public int? weight{ get; set; }
+        public int? height{ get; set; }
+        public string birthcity{ get; set; }
+        public string birthstate{ get; set; }
     }
 }
