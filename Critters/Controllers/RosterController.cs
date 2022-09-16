@@ -17,7 +17,7 @@ namespace Critters.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Rosters.ToListAsync());
+            return View((await _context.Rosters.ToListAsync(), await _context.Temps.ToListAsync()));
         }
     }
 }

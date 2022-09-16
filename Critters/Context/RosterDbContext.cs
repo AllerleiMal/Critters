@@ -15,12 +15,12 @@ namespace Critters.Context
        protected override void OnConfiguring(DbContextOptionsBuilder builder)
         {
 
-            builder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=critters;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+          //  builder.UseSqlServer(@"Data Source=NIZIER\NIKITADB;Initial Catalog=Critters;Integrated Security=True");
             base.OnConfiguring(builder);
 
         }
-
+       
        public DbSet<Roster> Rosters { set; get; }
+        public DbSet<Temp> Temps { set; get; }
     }
-
 }
