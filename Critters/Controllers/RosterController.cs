@@ -1,9 +1,7 @@
 ﻿using Critters.Context;
 using Critters.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Critters.Controllers
 {
@@ -47,6 +45,7 @@ namespace Critters.Controllers
             foreach (var player in deletedPlayers)
             {
                 _context.Rosters.Remove(player);
+                Console.WriteLine($"{player.fname}, {player.sname}");
                 await _context.Temps.AddAsync(Temp.GetFromRoster(player));
             }
 
