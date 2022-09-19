@@ -2,14 +2,14 @@
 
 <script language="JavaScript">
     function toggle(source, name) {
-        checkboxes = document.getElementsByName(name);//getElementsByClassName('checkbox_user');
+        var checkboxes = document.getElementsByName(name);//getElementsByClassName('checkbox_user');
         for (var i = 0; i < checkboxes.length; i++) {
             checkboxes[i].checked = source.checked;
         }
     }
 
     function toggle_unit(source, name) {
-        checkbox = document.getElementByName(name);
+        var checkbox = document.getElementsByName(name)[0];
         if (!source.checked && checkbox.checked) {
             checkbox.checked = false;
         }
