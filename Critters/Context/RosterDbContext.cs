@@ -14,8 +14,6 @@ namespace Critters.Context
 
        protected override void OnConfiguring(DbContextOptionsBuilder builder)
         {
-
-            // builder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=сritters;Integrated Security=True;");
             base.OnConfiguring(builder);
 
         }

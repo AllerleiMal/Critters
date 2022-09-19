@@ -7,25 +7,32 @@ namespace Critters.Models
     public class Roster
     {
         [Key]
-        [Required]
         public string playerid { get; set; }
-        [Required]
         public int? jersey{ get; set; }
-        [Required]
         public string fname{ get; set; }
-        [Required]
         public string sname{ get; set; }
-        [Required]
         public string position{ get; set; }
-        [Required]
         public DateTime birthday{ get; set; }
-        [Required]
         public int? weight{ get; set; }
-        [Required]
         public int? height{ get; set; }
-        [Required]
         public string birthcity{ get; set; }
-        [Required]
         public string birthstate{ get; set; }
+
+        public static implicit operator Roster(Temp temp)
+        {
+            return new Roster()
+            {
+                playerid = temp.playerid,
+                birthcity = temp.birthcity,
+                birthday = temp.birthday,
+                birthstate = temp.birthstate,
+                fname = temp.fname,
+                height = temp.height,
+                weight = temp.weight,
+                jersey = temp.jersey,
+                position = temp.position,
+                sname = temp.sname
+            };
+        }
     }
 }

@@ -1,0 +1,126 @@
+﻿@model RosterView
+
+<script language="JavaScript">
+    function toggle(source, name) {
+        checkboxes = document.getElementsByName(name);//getElementsByClassName('checkbox_user');
+        for (var i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = source.checked;
+        }
+    }
+
+    function toggle_unit(source, name) {
+        checkbox = document.getElementByName(name);
+        if (!source.checked && checkbox.checked) {
+            checkbox.checked = false;
+        }
+        
+    }
+</script> 
+
+
+        @using (Html.BeginForm("Players", "Roster", FormMethod.Post))
+                    {
+    <div class="row">
+                        <div class="col">
+                            <label>From</label> @Html.EditorFor(p => p.conditions.From)
+                        </div>
+                        <div class="col">
+                            <label>to</label> @Html.EditorFor(p => p.conditions.To)
+                        </div>
+                        <div class="col">
+                            <label>Position</label> @Html.EditorFor(p => p.conditions.Position) 
+                        </div>
+                        <div class="col">
+                            <input type="submit" value="Delete" name="delete"/>
+                        </div>
+                        <div class="col">
+                            <input type="submit" value="Recover" name="recover"/>
+                        </div>
+    </div>
+
+        <div class="row">
+        <div class="col-md-4">
+        <table class="table">
+            <thead style="background-color: green">
+            <tr>
+                <th scope="col">
+                   <input type="checkbox" name="all_rosters" value="all_rosters" onclick="toggle(this, 'checkboxes_rosters')"/>
+                </th>
+                <th scope="col">Player Id</th>
+                <th scope="col">Jersey</th>
+                <th scope="col">First name</th>
+                <th scope="col">Second name</th>
+                <th scope="col">Position</th>
+                <th scope="col">Birthday</th>
+                <th scope="col">Weight</th>
+                <th scope="col">Height</th>
+                <th scope="col">Birth city</th>
+                <th scope="col">Birth state</th>
+            </tr>
+            </thead>
+            <tbody>
+            @{
+                foreach (Roster roster in Model.Rosters)
+                {
+                            <tr>
+                                <td> <input class="checkbox" name="checkboxes_rosters" value=@roster.playerid type="checkbox" onclick="toggle_unit(this, 'all_rosters')" /></td>
+                                <td scope="col">@roster.playerid</td>
+                                <td scope="col">@roster.jersey?.ToString()</td>
+                                <td scope="col">@roster.fname</td>
+                                <td scope="col">@roster.sname</td>
+                                <td scope="col">@roster.position</td>
+                                <td scope="col">@roster.birthday.ToLongDateString()</td>
+                                <td scope="col">@roster.weight?.ToString()</td>
+                                <td scope="col">@roster.height?.ToString()</td>
+                                <td scope="col">@roster.birthcity</td>
+                                <td scope="col">@roster.birthstate</td>
+                            </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <table class="table">
+            <thead style="background-color: red">
+            <tr>
+                <th scope="col">
+                   <input type="checkbox" name="all_temps" value="all_temps" onclick="toggle(this, 'checkboxes_temps')"/>
+                </th>
+                <th scope="col">Player Id</th>
+                <th scope="col">Jersey</th>
+                <th scope="col">First name</th>
+                <th scope="col">Second name</th>
+                <th scope="col">Position</th>
+                <th scope="col">Birthday</th>
+                <th scope="col">Weight</th>
+                <th scope="col">Height</th>
+                <th scope="col">Birth city</th>
+                <th scope="col">Birth state</th>
+            </tr>
+            </thead>
+            <tbody>
+            @{
+                foreach (Temp temp in Model.Temps)
+                {
+                            <tr>
+                                <td> <input class="checkbox" name="checkboxes_temps" value=@temp.playerid type="checkbox" onclick="toggle_unit(this, 'all_temps')" /></td>
+                                <td scope="col">@temp.playerid</td>
+                                <td scope="col">@temp.jersey?.ToString()</td>
+                                <td scope="col">@temp.fname</td>
+                                <td scope="col">@temp.sname</td>
+                                <td scope="col">@temp.position</td>
+                                <td scope="col">@temp.birthday.ToLongDateString()</td>
+                                <td scope="col">@temp.weight?.ToString()</td>
+                                <td scope="col">@temp.height?.ToString()</td>
+                                <td scope="col">@temp.birthcity</td>
+                                <td scope="col">@temp.birthstate</td>
+                            </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+    </div>
+    }

@@ -2,7 +2,7 @@
 
 public class RosterView
 {
-    public List<Roster> Roster { get; set; }
-    public List<Temp> Temp { get; set; }
+    public List<Roster> Rosters { get; set; }
+    public List<Temp> Temps { get; set; }
     public DeleteConditions conditions { get; set; }
 }

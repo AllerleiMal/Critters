@@ -7,41 +7,32 @@ namespace Critters.Models
     public class Temp
     {
         [Key]
-        [Required]
-        public string id { get; set; }
-        [Required]
+        public string playerid { get; set; }
         public int? jersey{ get; set; }
-        [Required]
         public string fname{ get; set; }
-        [Required]
         public string sname{ get; set; }
-        [Required]
         public string position{ get; set; }
-        [Required]
         public DateTime birthday{ get; set; }
-        [Required]
         public int? weight{ get; set; }
-        [Required]
         public int? height{ get; set; }
-        [Required]
         public string birthcity{ get; set; }
-        [Required]
         public string birthstate{ get; set; }
-        
-        public static Temp GetFromRoster(Roster roster)
+
+        public static implicit operator Temp(Roster roster)
         {
-            Temp temp = new Temp();
-            temp.id = roster.playerid;
-            temp.birthcity = roster.birthcity;
-            temp.birthday = roster.birthday;
-            temp.birthstate = roster.birthstate;
-            temp.fname = roster.fname;
-            temp.height = roster.height;
-            temp.weight = roster.weight;
-            temp.jersey = roster.jersey;
-            temp.position = roster.position;
-            temp.sname = roster.sname;
-            return temp;
+            return new Temp()
+            {
+                playerid = roster.playerid,
+                birthcity = roster.birthcity,
+                birthday = roster.birthday,
+                birthstate = roster.birthstate,
+                fname = roster.fname,
+                height = roster.height,
+                weight = roster.weight,
+                jersey = roster.jersey,
+                position = roster.position,
+                sname = roster.sname
+            };
         }
     }
 }
