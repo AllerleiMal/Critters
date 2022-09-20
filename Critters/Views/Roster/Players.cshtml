@@ -2,7 +2,7 @@
 
 <script language="JavaScript">
     function toggle(source, name) {
-        var checkboxes = document.getElementsByName(name);//getElementsByClassName('checkbox_user');
+        var checkboxes = document.getElementsByName(name);
         for (var i = 0; i < checkboxes.length; i++) {
             checkboxes[i].checked = source.checked;
         }
@@ -22,13 +22,13 @@
                     {
     <div class="row">
                         <div class="col">
-                            <label>From</label> @Html.EditorFor(p => p.conditions.From)
+                            <label>From</label> @Html.EditorFor(p => p.Conditions.From)
                         </div>
                         <div class="col">
-                            <label>to</label> @Html.EditorFor(p => p.conditions.To)
+                            <label>to</label> @Html.EditorFor(p => p.Conditions.To)
                         </div>
                         <div class="col">
-                            <label>Position</label> @Html.EditorFor(p => p.conditions.Position) 
+                            <label>Position</label> @Html.EditorFor(p => p.Conditions.Position) 
                         </div>
                         <div class="col">
                             <input type="submit" value="Delete" name="delete"/>
@@ -44,7 +44,7 @@
             <thead style="background-color: green">
             <tr>
                 <th scope="col">
-                   <input type="checkbox" name="all_rosters" value="all_rosters" onclick="toggle(this, 'checkboxes_rosters')"/>
+                   <input type="checkbox" name="allRosters" value="allRosters" onclick="toggle(this, 'checkboxesRosters')"/>
                 </th>
                 <th scope="col">Player Id</th>
                 <th scope="col">Jersey</th>
@@ -63,17 +63,17 @@
                 foreach (Roster roster in Model.Rosters)
                 {
                             <tr>
-                                <td> <input class="checkbox" name="checkboxes_rosters" value=@roster.playerid type="checkbox" onclick="toggle_unit(this, 'all_rosters')" /></td>
-                                <td scope="col">@roster.playerid</td>
-                                <td scope="col">@roster.jersey?.ToString()</td>
-                                <td scope="col">@roster.fname</td>
-                                <td scope="col">@roster.sname</td>
-                                <td scope="col">@roster.position</td>
-                                <td scope="col">@roster.birthday.ToLongDateString()</td>
-                                <td scope="col">@roster.weight?.ToString()</td>
-                                <td scope="col">@roster.height?.ToString()</td>
-                                <td scope="col">@roster.birthcity</td>
-                                <td scope="col">@roster.birthstate</td>
+                                <td> <input class="checkbox" name="checkboxesRosters" value=@roster.Playerid type="checkbox" onclick="toggle_unit(this, 'allRosters')" /></td>
+                                <td scope="col">@roster.Playerid</td>
+                                <td scope="col">@roster.Jersey?.ToString()</td>
+                                <td scope="col">@roster.Fname</td>
+                                <td scope="col">@roster.Sname</td>
+                                <td scope="col">@roster.Position</td>
+                                <td scope="col">@roster.Birthday.ToLongDateString()</td>
+                                <td scope="col">@roster.Weight?.ToString()</td>
+                                <td scope="col">@roster.Height?.ToString()</td>
+                                <td scope="col">@roster.Birthcity</td>
+                                <td scope="col">@roster.Birthstate</td>
                             </tr>
                 }
             }
@@ -86,7 +86,7 @@
             <thead style="background-color: red">
             <tr>
                 <th scope="col">
-                   <input type="checkbox" name="all_temps" value="all_temps" onclick="toggle(this, 'checkboxes_temps')"/>
+                   <input type="checkbox" name="allTemps" value="allTemps" onclick="toggle(this, 'checkboxesTemps')"/>
                 </th>
                 <th scope="col">Player Id</th>
                 <th scope="col">Jersey</th>
@@ -105,17 +105,17 @@
                 foreach (Temp temp in Model.Temps)
                 {
                             <tr>
-                                <td> <input class="checkbox" name="checkboxes_temps" value=@temp.playerid type="checkbox" onclick="toggle_unit(this, 'all_temps')" /></td>
-                                <td scope="col">@temp.playerid</td>
-                                <td scope="col">@temp.jersey?.ToString()</td>
-                                <td scope="col">@temp.fname</td>
-                                <td scope="col">@temp.sname</td>
-                                <td scope="col">@temp.position</td>
-                                <td scope="col">@temp.birthday.ToLongDateString()</td>
-                                <td scope="col">@temp.weight?.ToString()</td>
-                                <td scope="col">@temp.height?.ToString()</td>
-                                <td scope="col">@temp.birthcity</td>
-                                <td scope="col">@temp.birthstate</td>
+                                <td> <input class="checkbox" name="checkboxesTemps" value=@temp.Playerid type="checkbox" onclick="toggle_unit(this, 'allTemps')" /></td>
+                                <td scope="col">@temp.Playerid</td>
+                                <td scope="col">@temp.Jersey?.ToString()</td>
+                                <td scope="col">@temp.Fname</td>
+                                <td scope="col">@temp.Sname</td>
+                                <td scope="col">@temp.Position</td>
+                                <td scope="col">@temp.Birthday.ToLongDateString()</td>
+                                <td scope="col">@temp.Weight?.ToString()</td>
+                                <td scope="col">@temp.Height?.ToString()</td>
+                                <td scope="col">@temp.Birthcity</td>
+                                <td scope="col">@temp.Birthstate</td>
                             </tr>
                 }
             }

@@ -18,7 +18,6 @@ namespace Critters.Controllers
         public async Task<IActionResult> Players()
         {
             //ViewBag.Positions = new List<string>{"RW", "D", "LW", "C", "G"};
-            // ViewBag.DeleteConditions = new DeleteConditions();
             RosterView model = new RosterView();
             model.Temps = await _context.Temps.ToListAsync();
             model.Rosters = await _context.Rosters.ToListAsync();
@@ -27,26 +26,23 @@ namespace Critters.Controllers
         
         
         [HttpPost]
-        public async Task<IActionResult> Players(RosterView model, string delete, string recover, string all_rosters,
-            List<string> checkboxes_rosters, string all_temps, List<string> checkboxes_temps)
+        public async Task<IActionResult> Players(RosterView model, string delete, string recover, string allRosters,
+            List<string> checkboxesRosters, string allTemps, List<string> checkboxesTemps)
         {
             if (!string.IsNullOrEmpty(delete))
             {
                 await Delete(
-                    fromDate: model.conditions.From, 
-                    toDate: model.conditions.To,
-                    position: model.conditions.Position,
-                    all_rosters: all_rosters,
-                    checkboxes_rosters: checkboxes_rosters);
+                    fromDate: model.Conditions.From, 
+                    toDate: model.Conditions.To,
+                    position: model.Conditions.Position,
+                    allRosters: allRosters,
+                    checkboxesRosters: checkboxesRosters);
             }
             else if (!string.IsNullOrEmpty(recover))
             {
                 await Recover(
-                    fromDate: model.conditions.From,
-                    toDate: model.conditions.To,
-                    position: model.conditions.Position,
-                    all_temps: all_temps,
-                    checkboxes_temps: checkboxes_temps);
+                    allTemps: allTemps,
+                    checkboxesTemps: checkboxesTemps);
             }
 
             await _context.SaveChangesAsync();
@@ -57,24 +53,24 @@ namespace Critters.Controllers
             return View(model);
         }
 
-        public async Task Recover(DateTime fromDate, DateTime toDate, string position, string all_temps, List<string> checkboxes_temps)
+        public async Task Recover(string allTemps, List<string> checkboxesTemps)
         {
             IEnumerable<Temp> deletedPlayers = _context.Temps;
 
-            if (!string.IsNullOrEmpty(all_temps))
+            if (!string.IsNullOrEmpty(allTemps))
             {
                 foreach (var player in deletedPlayers)
                 {
                     _context.Temps.Remove(player);
                     await _context.Rosters.AddAsync(player); // implicit operator is optional
                 }
-
+            
                 return;
             }
-
-            if (checkboxes_temps != null)
+            
+            if (checkboxesTemps.Count != 0)
             {
-                foreach (string playerid in checkboxes_temps)
+                foreach (string playerid in checkboxesTemps)
                 {
                     Temp? player = await _context.Temps.FindAsync(playerid);
                     if (player != null)
@@ -83,16 +79,14 @@ namespace Critters.Controllers
                         _context.Temps.Remove(player);
                     }
                 }
-
-                return;
             }
         }
 
-        public async Task Delete(DateTime fromDate, DateTime toDate, string position, string all_rosters, List<string> checkboxes_rosters)
+        public async Task Delete(DateTime fromDate, DateTime toDate, string position, string allRosters, List<string> checkboxesRosters)
         {
             IEnumerable<Roster> deletedPlayers = _context.Rosters;
 
-            if(!string.IsNullOrEmpty(all_rosters))
+            if(!string.IsNullOrEmpty(allRosters))
             {
                 foreach (var player in deletedPlayers)
                 {
@@ -103,9 +97,9 @@ namespace Critters.Controllers
                 return;
             }
 
-            if (checkboxes_rosters != null)
+            if (checkboxesRosters.Count != 0)
             {
-                foreach (string playerid in checkboxes_rosters)
+                foreach (string playerid in checkboxesRosters)
                 {
                     Roster? player = await _context.Rosters.FindAsync(playerid);
                     if (player != null)
@@ -126,13 +120,13 @@ namespace Critters.Controllers
                 return;
 
             if (!fromDate.Equals(defaultDate))
-                deletedPlayers = deletedPlayers.Where(player => DateTime.Compare(player.birthday, fromDate) >= 0);
+                deletedPlayers = deletedPlayers.Where(player => DateTime.Compare(player.Birthday, fromDate) >= 0);
 
             if (!toDate.Equals(defaultDate))
-                deletedPlayers = deletedPlayers.Where(player => DateTime.Compare(player.birthday, toDate) <= 0);
+                deletedPlayers = deletedPlayers.Where(player => DateTime.Compare(player.Birthday, toDate) <= 0);
 
             if (!String.IsNullOrEmpty(position))
-                deletedPlayers = deletedPlayers.Where(player => player.position == position);
+                deletedPlayers = deletedPlayers.Where(player => player.Position == position);
 
 
             foreach (var player in deletedPlayers)
