@@ -25,9 +25,9 @@
 
         <div class="row">
             <div class="col">
-                <div class="row">
+                <div class="row" style="margin-bottom: 10px; margin-top: 10px; align-content: center; align-items: center">
                     <div class="col">
-                        <label>From</label> @Html.EditorFor(p => p.Conditions.From)
+                        <label>From</label> @Html.EditorFor(p => p.Conditions.From, new Dictionary<string, object>{{"class", "form-control"}})
                     </div>
                     
                     <div class="col">
@@ -39,7 +39,7 @@
                         @* <label>Position</label> @Html.EditorFor(p => p.Conditions.Position) *@
                     </div>
                     <div class="col">
-                        <input type="submit" value="Delete" name="delete"/>
+                        <input class="btn btn-danger" type="submit" value="Delete" name="delete"/>
                     </div>
                 </div>
                 <table class="table">
@@ -84,9 +84,9 @@
             </div>
     @* <div class="col-md-4"></div> *@
     <div class="col">
-        <div class="row">
+        <div class="row" style="margin-bottom: 10px; margin-top: 10px; text-align: center">
             <div class="col">
-                <input type="submit" value="Recover" name="recover" style="align-content: center; max-width: 10%;"/>
+                <input type="submit" class="btn btn-success" value="Recover" name="recover"/>
             </div>
         </div>
         <table class="table">
