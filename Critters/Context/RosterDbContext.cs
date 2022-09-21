@@ -5,10 +5,20 @@ namespace Critters.Context
 {
     public class RosterDbContext : DbContext
     {
-        public RosterDbContext(DbContextOptions<RosterDbContext> options) : base(options) { }
+        public RosterDbContext() { }
 
+        public RosterDbContext(DbContextOptions<RosterDbContext> options) : base(options) 
+        {
+            Database.EnsureCreated();
+        }
 
-        public DbSet<Roster> Rosters { set; get; }
+       protected override void OnConfiguring(DbContextOptionsBuilder builder)
+        {
+            base.OnConfiguring(builder);
 
+        }
+       
+       public DbSet<Roster> Rosters { set; get; }
+       public DbSet<Temp> Temps { set; get; }
     }
 }

@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Critters.Models
 {
-    [Table("roster")]
-    public class Roster
+    [Table("temp")]
+    public class Temp
     {
         [Key]
         public string Playerid { get; set; }
@@ -18,20 +18,20 @@ namespace Critters.Models
         public string Birthcity{ get; set; }
         public string Birthstate{ get; set; }
 
-        public static implicit operator Roster(Temp temp)
+        public static implicit operator Temp(Roster roster)
         {
-            return new Roster()
+            return new Temp()
             {
-                Playerid = temp.Playerid,
-                Birthcity = temp.Birthcity,
-                Birthday = temp.Birthday,
-                Birthstate = temp.Birthstate,
-                Fname = temp.Fname,
-                Height = temp.Height,
-                Weight = temp.Weight,
-                Jersey = temp.Jersey,
-                Position = temp.Position,
-                Sname = temp.Sname
+                Playerid = roster.Playerid,
+                Birthcity = roster.Birthcity,
+                Birthday = roster.Birthday,
+                Birthstate = roster.Birthstate,
+                Fname = roster.Fname,
+                Height = roster.Height,
+                Weight = roster.Weight,
+                Jersey = roster.Jersey,
+                Position = roster.Position,
+                Sname = roster.Sname
             };
         }
     }

@@ -1,0 +1,133 @@
+﻿@using Microsoft.AspNetCore.Mvc.Rendering
+@model RosterView
+
+<script language="JavaScript">
+    function toggle(source, name) {
+        var checkboxes = document.getElementsByName(name);
+        for (var i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = source.checked;
+        }
+    }
+
+    function toggle_unit(source, name) {
+        var checkbox = document.getElementsByName(name)[0];
+        if (!source.checked && checkbox.checked) {
+            checkbox.checked = false;
+        }
+        
+    }
+</script> 
+
+
+        @using (Html.BeginForm("Players", "Roster", FormMethod.Post))
+                    {
+    
+
+        <div class="row">
+            <div class="col">
+                <div class="row" style="margin-bottom: 10px; margin-top: 10px; align-content: center; align-items: center">
+                    <div class="col">
+                        <label>From</label> @Html.EditorFor(p => p.Conditions.From, new Dictionary<string, object>{{"class", "form-control"}})
+                    </div>
+                    
+                    <div class="col">
+                        <label>to</label> @Html.EditorFor(p => p.Conditions.To)
+                    </div>
+                    
+                    <div class="col">
+                        @Html.DropDownListFor(p => p.Conditions.Position, ViewBag.Positions as List<SelectListItem>, "Position", new {style="width: 100px"})
+                        @* <label>Position</label> @Html.EditorFor(p => p.Conditions.Position) *@
+                    </div>
+                    <div class="col">
+                        <input class="btn btn-danger" type="submit" value="Delete" name="delete"/>
+                    </div>
+                </div>
+                <table class="table">
+                    <thead style="background-color: green">
+                    <tr>
+                        <th scope="col">
+                            <input type="checkbox" name="allRosters" value="allRosters" onclick="toggle(this, 'checkboxesRosters')"/>
+                        </th>
+                        <th scope="col">Player Id</th>
+                        <th scope="col">Jersey</th>
+                        <th scope="col">First name</th>
+                        <th scope="col">Second name</th>
+                        <th scope="col">Position</th>
+                        <th scope="col">Birthday</th>
+                        <th scope="col">Weight</th>
+                        <th scope="col">Height</th>
+                        <th scope="col">Birth city</th>
+                        <th scope="col">Birth state</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @{
+                        foreach (Roster roster in Model.Rosters)
+                        {
+                            <tr>
+                                <td> <input class="checkbox" name="checkboxesRosters" value=@roster.Playerid type="checkbox" onclick="toggle_unit(this, 'allRosters')"/></td>
+                                <td scope="col">@roster.Playerid</td>
+                                <td scope="col">@roster.Jersey?.ToString()</td>
+                                <td scope="col">@roster.Fname</td>
+                                <td scope="col">@roster.Sname</td>
+                                <td scope="col">@roster.Position</td>
+                                <td scope="col">@roster.Birthday.ToLongDateString()</td>
+                                <td scope="col">@roster.Weight?.ToString()</td>
+                                <td scope="col">@roster.Height?.ToString()</td>
+                                <td scope="col">@roster.Birthcity</td>
+                                <td scope="col">@roster.Birthstate</td>
+                            </tr>
+                        }
+                    }
+                    </tbody>
+                </table>
+            </div>
+    @* <div class="col-md-4"></div> *@
+    <div class="col">
+        <div class="row" style="margin-bottom: 10px; margin-top: 10px; text-align: center">
+            <div class="col">
+                <input type="submit" class="btn btn-success" value="Recover" name="recover"/>
+            </div>
+        </div>
+        <table class="table">
+            <thead style="background-color: red">
+            <tr>
+                <th scope="col">
+                    <input type="checkbox" name="allTemps" value="allTemps" onclick="toggle(this, 'checkboxesTemps')"/>
+                </th>
+                <th scope="col">Player Id</th>
+                <th scope="col">Jersey</th>
+                <th scope="col">First name</th>
+                <th scope="col">Second name</th>
+                <th scope="col">Position</th>
+                <th scope="col">Birthday</th>
+                <th scope="col">Weight</th>
+                <th scope="col">Height</th>
+                <th scope="col">Birth city</th>
+                <th scope="col">Birth state</th>
+            </tr>
+            </thead>
+            <tbody>
+            @{
+                foreach (Temp temp in Model.Temps)
+                {
+                    <tr>
+                        <td> <input class="checkbox" name="checkboxesTemps" value=@temp.Playerid type="checkbox" onclick="toggle_unit(this, 'allTemps')"/></td>
+                        <td scope="col">@temp.Playerid</td>
+                        <td scope="col">@temp.Jersey?.ToString()</td>
+                        <td scope="col">@temp.Fname</td>
+                        <td scope="col">@temp.Sname</td>
+                        <td scope="col">@temp.Position</td>
+                        <td scope="col">@temp.Birthday.ToLongDateString()</td>
+                        <td scope="col">@temp.Weight?.ToString()</td>
+                        <td scope="col">@temp.Height?.ToString()</td>
+                        <td scope="col">@temp.Birthcity</td>
+                        <td scope="col">@temp.Birthstate</td>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+    </div>
+    }
