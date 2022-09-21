@@ -15,4 +15,16 @@ html {
 
 body {
   margin-bottom: 60px;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+.container{
+  box-sizing: border-box;
+  max-width: 95%;
+  background-color: #aefaff;
+}
+
+.form{
+  width: 100%;
 }

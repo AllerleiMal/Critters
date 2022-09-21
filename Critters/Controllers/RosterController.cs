@@ -1,6 +1,7 @@
 ﻿using Critters.Context;
 using Critters.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace Critters.Controllers
@@ -14,13 +15,28 @@ namespace Critters.Controllers
             _context = context;
         }
 
+        public List<SelectListItem> GetAllPositions()
+        {
+            List<SelectListItem> positions = new List<SelectListItem>
+            {
+                new("RW", "RW"),
+                new("D", "D"),
+                new("LW", "LW"),
+                new("C", "C"),
+                new("G", "G")
+            };
+            return positions;
+        }
+
         [HttpGet]
         public async Task<IActionResult> Players()
         {
-            //ViewBag.Positions = new List<string>{"RW", "D", "LW", "C", "G"};
+            ViewBag.Positions = GetAllPositions();
             RosterView model = new RosterView();
             model.Temps = await _context.Temps.ToListAsync();
             model.Rosters = await _context.Rosters.ToListAsync();
+            model.Temps.Sort((t1, t2) => (t1.Jersey ?? 0).CompareTo(t2.Jersey ?? 0));
+            model.Rosters.Sort((t1, t2) => (t1.Jersey ?? 0).CompareTo(t2.Jersey ?? 0));
             return View(model);
         }
         
@@ -49,7 +65,11 @@ namespace Critters.Controllers
 
             model.Temps = await _context.Temps.ToListAsync();
             model.Rosters = await _context.Rosters.ToListAsync();
+            model.Temps.Sort((t1, t2) => (t1.Jersey ?? 0).CompareTo(t2.Jersey ?? 0));
+            model.Rosters.Sort((t1, t2) => (t1.Jersey ?? 0).CompareTo(t2.Jersey ?? 0));
 
+            ViewBag.Positions = GetAllPositions();
+            
             return View(model);
         }
 
