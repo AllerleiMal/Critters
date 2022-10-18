@@ -97,7 +97,7 @@ public class CrittersService : Critters.CrittersBase
         foreach (var player in deletedPlayers)
         {
             _context.Rosters.Remove(player);
-            await _context.Temps.AddAsync(player); // implicit operator is optional
+            await _context.Temps.AddAsync(player);
         }
     }
     
@@ -110,7 +110,7 @@ public class CrittersService : Critters.CrittersBase
             foreach (var player in deletedPlayers)
             {
                 _context.Temps.Remove(player);
-                await _context.Rosters.AddAsync(player); // implicit operator is optional
+                await _context.Rosters.AddAsync(player);
             }
             
             return;
@@ -123,7 +123,7 @@ public class CrittersService : Critters.CrittersBase
                 Temp? player = await _context.Temps.FindAsync(playerid);
                 if (player != null)
                 {
-                    await _context.Rosters.AddAsync(player); // implicit operator is optional
+                    await _context.Rosters.AddAsync(player);
                     _context.Temps.Remove(player);
                 }
             }

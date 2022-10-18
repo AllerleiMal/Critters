@@ -9,16 +9,12 @@ namespace Critters.Controllers
     public class RosterController : Controller
     {
         private Critters.CrittersClient _client;
-        
+
+        private List<SelectListItem> _positions;
 
         public RosterController()
         {
-            _client = new Critters.CrittersClient(GrpcChannel.ForAddress("https://localhost:7201/"));
-        }
-
-        public List<SelectListItem> GetAllPositions()
-        {
-            List<SelectListItem> positions = new List<SelectListItem>
+            _positions = new List<SelectListItem>
             {
                 new("RW", "RW"),
                 new("D", "D"),
@@ -26,19 +22,17 @@ namespace Critters.Controllers
                 new("C", "C"),
                 new("G", "G")
             };
-            return positions;
+
+            _client = new Critters.CrittersClient(GrpcChannel.ForAddress("https://localhost:7201/"));
         }
 
         [HttpGet]
         public async Task<IActionResult> Players()
         {
-            ViewBag.Positions = GetAllPositions();
-            var reply = await _client.GetPlayersAsync(new GetPlayersRequest { Name = "get" });
-            CrittersModel model = JsonSerializer.Deserialize<CrittersModel>(reply.SerializedPlayers)!;
-            return View(model);
+            return View(await SetCrittersPage());
         }
         
-        
+    
         [HttpPost]
         public async Task<IActionResult> Players(CrittersModel model, string delete, string recover, string allRosters,
             List<string> checkboxesRosters, string allTemps, List<string> checkboxesTemps)
@@ -61,12 +55,15 @@ namespace Critters.Controllers
                     CheckboxesTemps = { checkboxesTemps }
                 });
             }
-
-            ViewBag.Positions = GetAllPositions();
-            var reply = await _client.GetPlayersAsync(new GetPlayersRequest { Name = "get" });
-            model = JsonSerializer.Deserialize<CrittersModel>(reply.SerializedPlayers)!;
             
-            return View(model);
+            return View(await SetCrittersPage());
+        }
+
+        private async Task<CrittersModel> SetCrittersPage()
+        {
+            ViewBag.Positions = _positions;
+            var reply = await _client.GetPlayersAsync(new GetPlayersRequest { Name = "get" });
+            return JsonSerializer.Deserialize<CrittersModel>(reply.SerializedPlayers)!;
         }
 
     }
