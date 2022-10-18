@@ -1,6 +1,6 @@
 ﻿namespace gRPC.Models;
 
-public class Critters
+public class CrittersModel
 {
     public List<Roster> Rosters { get; set; }
     public List<Temp> Temps { get; set; }

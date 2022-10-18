@@ -17,7 +17,7 @@ public class CrittersService : Critters.CrittersBase
 
     public override async Task<GetPlayersResponse> GetPlayers(GetPlayersRequest request, ServerCallContext context)
     {
-        var model = new RosterView
+        var model = new CrittersModel
         {
             Temps = await _context.Temps.ToListAsync(),
             Rosters = await _context.Rosters.ToListAsync(),
