@@ -1,0 +1,17 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "CrittersClient";
+
+package critters;
+
+service Critters{
+  rpc GetPlayers (GetPlayersRequest) returns (GetPlayersResponse);
+}
+
+message GetPlayersRequest{
+  string name = 1;
+}
+
+message GetPlayersResponse{
+  string serializedPlayers = 1;
+}
