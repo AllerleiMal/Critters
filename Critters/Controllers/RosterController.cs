@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Runtime.Serialization.Json;
 using System.Text;
+using System.Text.Json;
 
 namespace Critters.Controllers
 {
@@ -40,7 +41,8 @@ namespace Critters.Controllers
 
             DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(RosterView));
             byte[] data = proxy.DownloadData(serviceURL + "/GetCritters");
-           RosterView model = serializer.ReadObject(new MemoryStream(data)) as RosterView;
+            string s = Encoding.Default.GetString(data);
+            RosterView model = JsonSerializer.Deserialize<RosterView>(data); //serializer.ReadObject(new MemoryStream(data)) as RosterView;
 
             //RosterView model = new RosterView();
             //model.Temps = await _context.Temps.ToListAsync();

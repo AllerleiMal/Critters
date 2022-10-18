@@ -9,6 +9,7 @@ namespace WCF.Models
     [DataContract]
     public class DeleteConditions
     {
+        [DataMember]
         IEnumerable<SelectListItem> _chosenPosition;
 
         [DataMember]

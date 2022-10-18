@@ -45,6 +45,6 @@ namespace WCF
             UriTemplate = "/GetCritters",
             RequestFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped)]
-        Task<RosterView> GetCritters();
+        RosterView GetCritters();
     }
 }

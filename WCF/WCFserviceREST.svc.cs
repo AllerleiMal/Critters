@@ -18,7 +18,22 @@ namespace WCF
     {
         public string Foo()
         {
-            return "Hello";
+            try
+            {
+                using (RosterDbContext context = new RosterDbContext("DefaultConnection"))
+                {
+                    RosterView model = new RosterView();
+                    model.Temps = context.Temps.ToList();
+                    model.Rosters = context.Rosters.ToList();
+                    model.Temps.Sort((t1, t2) => (t1.Jersey ?? 0).CompareTo(t2.Jersey ?? 0));
+                    model.Rosters.Sort((t1, t2) => (t1.Jersey ?? 0).CompareTo(t2.Jersey ?? 0));
+
+                    return model.Rosters.Count.ToString();
+                }
+            } catch(Exception ex)
+            {
+                return "err: " + ex.Message;
+            }
         }
 
         public async Task Delete(DateTime fromDate, DateTime toDate, string position, string allRosters, List<string> checkboxesRosters)
@@ -95,21 +110,19 @@ namespace WCF
             }
         }
 
-        public async Task<RosterView> GetCritters()
+        public RosterView GetCritters()
         {
-            //using (RosterDbContext context = new RosterDbContext("DefaultConnection"))
-            //{
+            using (RosterDbContext context = new RosterDbContext("DefaultConnection"))
+            {
 
-            //    RosterView model = new RosterView();
-            //    model.Temps = context.Temps.ToList();
-            //    model.Rosters = context.Rosters.ToList();
-            //    model.Temps.Sort((t1, t2) => (t1.Jersey ?? 0).CompareTo(t2.Jersey ?? 0));
-            //    model.Rosters.Sort((t1, t2) => (t1.Jersey ?? 0).CompareTo(t2.Jersey ?? 0));
+                    RosterView model = new RosterView();
+                    model.Temps = context.Temps.ToList();
+                    model.Rosters = context.Rosters.ToList();
+                    model.Temps.Sort((t1, t2) => (t1.Jersey ?? 0).CompareTo(t2.Jersey ?? 0));
+                    model.Rosters.Sort((t1, t2) => (t1.Jersey ?? 0).CompareTo(t2.Jersey ?? 0));
 
-            //    return model;
-            //}
-
-            return new RosterView();
+                    return model;
+            }
         }
     }
 }

@@ -4,6 +4,9 @@ using System.Runtime.Serialization;
 namespace WCF.Models
 {
     [DataContract]
+    [KnownType(typeof(Roster))]
+    [KnownType(typeof(Temp))]
+    [KnownType(typeof(DeleteConditions))]
     public class RosterView
     {
         [DataMember]
