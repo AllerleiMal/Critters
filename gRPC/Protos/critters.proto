@@ -6,7 +6,8 @@ package critters;
 
 service Critters{
   rpc GetPlayers (GetPlayersRequest) returns (GetPlayersResponse);
-  rpc MovePlayers (MovePlayersRequest) returns (MovePlayersResponse);
+  rpc DeletePlayers (DeletePlayersRequest) returns (DeletePlayersResponse);
+  rpc RecoverPlayers (RecoverPlayersRequest) returns (RecoverPlayersResponse);
 }
 
 message GetPlayersRequest{
@@ -17,10 +18,21 @@ message GetPlayersResponse{
   string serializedPlayers = 1;
 }
 
-message MovePlayersRequest{
-  string pageComponentInfo = 1;
+message DeletePlayersRequest{
+  string serializedConditions = 1;
+  string allRosters = 2;
+  repeated string checkboxesRosters = 3;
 }
 
-message MovePlayersResponse{
-  string serializedPlayers = 1;
+message DeletePlayersResponse{
+  string deleteResult = 1;
+}
+
+message RecoverPlayersRequest{
+  string allTemps = 1;
+  repeated string checkboxesTemps = 2;
+}
+
+message RecoverPlayersResponse{
+  string recoverResult = 1;
 }
