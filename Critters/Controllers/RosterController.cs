@@ -1,19 +1,19 @@
-﻿using Critters.Context;
-using Critters.Context;
+﻿
 using Critters.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
+using System.Runtime.Serialization.Json;
+using System.Text;
 
 namespace Critters.Controllers
 {
     public class RosterController : Controller
     {
-        private readonly RosterDbContext _context = new RosterDbContext();
-
-        public RosterController(RosterDbContext context)
+        private readonly string serviceURL = "http://localhost:49974/WCFserviceREST.svc";
+        public RosterController()
         {
-            _context = context;
         }
 
         public List<SelectListItem> GetAllPositions()
@@ -33,11 +33,20 @@ namespace Critters.Controllers
         public async Task<IActionResult> Players()
         {
             ViewBag.Positions = GetAllPositions();
-            RosterView model = new RosterView();
-            model.Temps = await _context.Temps.ToListAsync();
-            model.Rosters = await _context.Rosters.ToListAsync();
-            model.Temps.Sort((t1, t2) => (t1.Jersey ?? 0).CompareTo(t2.Jersey ?? 0));
-            model.Rosters.Sort((t1, t2) => (t1.Jersey ?? 0).CompareTo(t2.Jersey ?? 0));
+
+            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(RosterView));
+            WebClient proxy = new WebClient();
+            proxy.Headers["Context-type"] = @"application/json";
+
+            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(RosterView));
+            byte[] data = proxy.DownloadData(serviceURL + "/GetCritters");
+           RosterView model = serializer.ReadObject(new MemoryStream(data)) as RosterView;
+
+            //RosterView model = new RosterView();
+            //model.Temps = await _context.Temps.ToListAsync();
+            //model.Rosters = await _context.Rosters.ToListAsync();
+            //model.Temps.Sort((t1, t2) => (t1.Jersey ?? 0).CompareTo(t2.Jersey ?? 0));
+            //model.Rosters.Sort((t1, t2) => (t1.Jersey ?? 0).CompareTo(t2.Jersey ?? 0));
             return View(model);
         }
         
@@ -48,6 +57,9 @@ namespace Critters.Controllers
         {
             if (!string.IsNullOrEmpty(delete))
             {
+            //    var request = (HttpWebRequest)WebRequest
+             //      .Create(string.Format("http://localhost:49974/WCFserviceREST.svc/Delete"));
+
                 await Delete(
                     fromDate: model.Conditions.From, 
                     toDate: model.Conditions.To,
@@ -62,12 +74,12 @@ namespace Critters.Controllers
                     checkboxesTemps: checkboxesTemps);
             }
 
-            await _context.SaveChangesAsync();
+          /*  await _context.SaveChangesAsync();
 
             model.Temps = await _context.Temps.ToListAsync();
             model.Rosters = await _context.Rosters.ToListAsync();
             model.Temps.Sort((t1, t2) => (t1.Jersey ?? 0).CompareTo(t2.Jersey ?? 0));
-            model.Rosters.Sort((t1, t2) => (t1.Jersey ?? 0).CompareTo(t2.Jersey ?? 0));
+            model.Rosters.Sort((t1, t2) => (t1.Jersey ?? 0).CompareTo(t2.Jersey ?? 0));*/
 
             ViewBag.Positions = GetAllPositions();
             
@@ -76,7 +88,7 @@ namespace Critters.Controllers
 
         public async Task Recover(string allTemps, List<string> checkboxesTemps)
         {
-            IEnumerable<Temp> deletedPlayers = _context.Temps;
+         /*   IEnumerable<Temp> deletedPlayers = _context.Temps;
 
             if (!string.IsNullOrEmpty(allTemps))
             {
@@ -100,12 +112,12 @@ namespace Critters.Controllers
                         _context.Temps.Remove(player);
                     }
                 }
-            }
+            }*/
         }
 
         public async Task Delete(DateTime fromDate, DateTime toDate, string position, string allRosters, List<string> checkboxesRosters)
         {
-            IEnumerable<Roster> deletedPlayers = _context.Rosters;
+           /* IEnumerable<Roster> deletedPlayers = _context.Rosters;
 
             if(!string.IsNullOrEmpty(allRosters))
             {
@@ -154,7 +166,7 @@ namespace Critters.Controllers
             {
                 _context.Rosters.Remove(player);
                 await _context.Temps.AddAsync(player); // implicit operator is optional
-            }
+            }*/
         }
 
     }

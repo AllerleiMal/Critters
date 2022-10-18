@@ -8,13 +8,18 @@ using WCF.Context;
 using WCF.Models;
 using System.Threading.Tasks;
 using System.Configuration;
+using System.ServiceModel.Activation;
 
 namespace WCF
 {
-    // ПРИМЕЧАНИЕ. Команду "Переименовать" в меню "Рефакторинг" можно использовать для одновременного изменения имени класса "WCFserviceREST" в коде, SVC-файле и файле конфигурации.
-    // ПРИМЕЧАНИЕ. Чтобы запустить клиент проверки WCF для тестирования службы, выберите элементы WCFserviceREST.svc или WCFserviceREST.svc.cs в обозревателе решений и начните отладку.
+    [AspNetCompatibilityRequirements(RequirementsMode =
+        AspNetCompatibilityRequirementsMode.Allowed)]
     public class WCFserviceREST : IWCFserviceREST
     {
+        public string Foo()
+        {
+            return "Hello";
+        }
 
         public async Task Delete(DateTime fromDate, DateTime toDate, string position, string allRosters, List<string> checkboxesRosters)
         {
@@ -90,19 +95,21 @@ namespace WCF
             }
         }
 
-        public async Task<RosterView> getCritters()
+        public async Task<RosterView> GetCritters()
         {
-            using (RosterDbContext context = new RosterDbContext(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
-            {
-                RosterView model = new RosterView();
-                model.Temps = context.Temps.ToList();
-                model.Rosters = context.Rosters.ToList();
-                model.Temps.Sort((t1, t2) => (t1.Jersey ?? 0).CompareTo(t2.Jersey ?? 0));
-                model.Rosters.Sort((t1, t2) => (t1.Jersey ?? 0).CompareTo(t2.Jersey ?? 0));
+            //using (RosterDbContext context = new RosterDbContext("DefaultConnection"))
+            //{
 
-                return model;
-            }
+            //    RosterView model = new RosterView();
+            //    model.Temps = context.Temps.ToList();
+            //    model.Rosters = context.Rosters.ToList();
+            //    model.Temps.Sort((t1, t2) => (t1.Jersey ?? 0).CompareTo(t2.Jersey ?? 0));
+            //    model.Rosters.Sort((t1, t2) => (t1.Jersey ?? 0).CompareTo(t2.Jersey ?? 0));
+
+            //    return model;
+            //}
+
+            return new RosterView();
         }
-
     }
 }
