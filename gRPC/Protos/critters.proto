@@ -6,6 +6,7 @@ package critters;
 
 service Critters{
   rpc GetPlayers (GetPlayersRequest) returns (GetPlayersResponse);
+  rpc MovePlayers (MovePlayersRequest) returns (MovePlayersResponse);
 }
 
 message GetPlayersRequest{
@@ -13,5 +14,13 @@ message GetPlayersRequest{
 }
 
 message GetPlayersResponse{
+  string serializedPlayers = 1;
+}
+
+message MovePlayersRequest{
+  string pageComponentInfo = 1;
+}
+
+message MovePlayersResponse{
   string serializedPlayers = 1;
 }

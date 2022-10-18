@@ -15,16 +15,19 @@ public class CrittersService : Critters.CrittersBase
         _context = options;
     }
     
-    public override Task<GetPlayersResponse> GetPlayers(GetPlayersRequest request, ServerCallContext context)
+    public override async Task<GetPlayersResponse> GetPlayers(GetPlayersRequest request, ServerCallContext context)
     {
-        return Task.FromResult(new GetPlayersResponse
+        var model = new RosterView
+        {
+            Temps = await _context.Temps.ToListAsync(),
+            Rosters = await _context.Rosters.ToListAsync(),
+            Conditions = new DeleteConditions()
+        };
+        model.Temps.Sort((t1, t2) => (t1.Jersey ?? 0).CompareTo(t2.Jersey ?? 0));
+        model.Rosters.Sort((t1, t2) => (t1.Jersey ?? 0).CompareTo(t2.Jersey ?? 0));
+        return await Task.FromResult(new GetPlayersResponse
             {
-                SerializedPlayers = JsonSerializer.Serialize(new RosterView()
-                {
-                    Conditions = new DeleteConditions(),
-                    Rosters = _context.Rosters.ToListAsync().Result,
-                    Temps = _context.Temps.ToListAsync().Result
-                })
+                SerializedPlayers = JsonSerializer.Serialize(model)
             }
         );
     }

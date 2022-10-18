@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
-using CrittersClient;
 
 namespace Critters.Controllers
 {
@@ -13,14 +12,14 @@ namespace Critters.Controllers
     {
         private readonly RosterDbContext _context = new RosterDbContext();
         private GrpcChannel _grpcChannel;
-        private CrittersClient.Critters.CrittersClient _client;
+        private Critters.CrittersClient _client;
         
 
         public RosterController(RosterDbContext context)
         {
             _context = context;
             _grpcChannel = GrpcChannel.ForAddress("https://localhost:7201/");
-            _client = new CrittersClient.Critters.CrittersClient(_grpcChannel);
+            _client = new Critters.CrittersClient(_grpcChannel);
         }
 
         public List<SelectListItem> GetAllPositions()
@@ -40,14 +39,7 @@ namespace Critters.Controllers
         public async Task<IActionResult> Players()
         {
             ViewBag.Positions = GetAllPositions();
-            // RosterView model = new RosterView();
-            // model.Temps = await _context.Temps.ToListAsync();
-            // model.Rosters = await _context.Rosters.ToListAsync();
-            // model.Temps.Sort((t1, t2) => (t1.Jersey ?? 0).CompareTo(t2.Jersey ?? 0));
-            // model.Rosters.Sort((t1, t2) => (t1.Jersey ?? 0).CompareTo(t2.Jersey ?? 0));
-            // return View(model);
             var reply = await _client.GetPlayersAsync(new GetPlayersRequest { Name = "test" });
-            
             RosterView model = JsonSerializer.Deserialize<RosterView>(reply.SerializedPlayers)!;
             return View(model);
         }

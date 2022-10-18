@@ -1,5 +1,4 @@
 using Critters.Context;
-using gRPC.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
