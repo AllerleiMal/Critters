@@ -4,18 +4,15 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Critters.Models;
 
-[DataContract]
 public class DeleteConditions
 {
-    [DataMember]
     private IEnumerable<SelectListItem> _chosenPosition;
-
-    [DataMember]
-    [DataType(DataType.Date)] public DateTime From { get; set; }
-
-    [DataMember]
-    [DataType(DataType.Date)] public DateTime To { get; set; }
-
-    [DataMember]
+    
+    [DataType(DataType.Date)] 
+    public DateTime From { get; set; }
+    
+    [DataType(DataType.Date)] 
+    public DateTime To { get; set; }
+    
     public string Position { get; set; }
 }
