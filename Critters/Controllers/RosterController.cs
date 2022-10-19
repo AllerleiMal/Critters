@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Text.Json;
@@ -12,14 +13,12 @@ namespace Critters.Controllers
 {
     public class RosterController : Controller
     {
-        private readonly string serviceURL = "http://localhost:49974/WCFserviceREST.svc";
+        private readonly string _serviceURL;
+        private readonly List<SelectListItem> _positions;
         public RosterController()
         {
-        }
-
-        public List<SelectListItem> GetAllPositions()
-        {
-            List<SelectListItem> positions = new List<SelectListItem>
+            _serviceURL = "http://localhost:49974/WCFserviceREST.svc";
+            _positions = new List<SelectListItem>
             {
                 new("RW", "RW"),
                 new("D", "D"),
@@ -27,149 +26,83 @@ namespace Critters.Controllers
                 new("C", "C"),
                 new("G", "G")
             };
-            return positions;
         }
 
+      
         [HttpGet]
         public async Task<IActionResult> Players()
         {
-            ViewBag.Positions = GetAllPositions();
-
-            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(RosterView));
-            WebClient proxy = new WebClient();
-            proxy.Headers["Context-type"] = @"application/json";
-
-            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(RosterView));
-            byte[] data = proxy.DownloadData(serviceURL + "/GetCritters");
-            string s = Encoding.Default.GetString(data);
-            RosterView model = JsonSerializer.Deserialize<RosterView>(data); //serializer.ReadObject(new MemoryStream(data)) as RosterView;
-
-            //RosterView model = new RosterView();
-            //model.Temps = await _context.Temps.ToListAsync();
-            //model.Rosters = await _context.Rosters.ToListAsync();
-            //model.Temps.Sort((t1, t2) => (t1.Jersey ?? 0).CompareTo(t2.Jersey ?? 0));
-            //model.Rosters.Sort((t1, t2) => (t1.Jersey ?? 0).CompareTo(t2.Jersey ?? 0));
-            return View(model);
+            return View(getCritters());
         }
         
         
+        private RosterView getCritters()
+        {
+            ViewBag.Positions = _positions;
+
+            using (WebClient proxy = new WebClient())
+            {
+                DataContractSerializer ser = new DataContractSerializer(typeof(RosterView));
+                proxy.Headers["Context-type"] = @"application/xml";
+                byte[] data = proxy.DownloadData(_serviceURL + "/GetCritters");
+                RosterView model = (ser.ReadObject(new MemoryStream(data)) as RosterView)!;
+
+                return model;
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> Players(RosterView model, string delete, string recover, string allRosters,
             List<string> checkboxesRosters, string allTemps, List<string> checkboxesTemps)
         {
+
             if (!string.IsNullOrEmpty(delete))
             {
-            //    var request = (HttpWebRequest)WebRequest
-             //      .Create(string.Format("http://localhost:49974/WCFserviceREST.svc/Delete"));
+                DeleteContract contract = new DeleteContract()
+                {
+                    FromDate = model.Conditions.From,
+                    ToDate = model.Conditions.To,
+                    Position = model.Conditions.Position ?? "",
+                    AllRosters = allRosters ?? "",
+                    CheckboxesRosters = checkboxesRosters
+                };
 
-                await Delete(
-                    fromDate: model.Conditions.From, 
-                    toDate: model.Conditions.To,
-                    position: model.Conditions.Position,
-                    allRosters: allRosters,
-                    checkboxesRosters: checkboxesRosters);
+                using (WebClient client = new WebClient())
+                {
+                    client.Headers["Context-type"] = @"application/xml";
+
+                    MemoryStream ms = new MemoryStream();
+                    DataContractSerializer ser = new DataContractSerializer(typeof(DeleteContract));
+                    ser.WriteObject(ms, contract);
+                    string data = Encoding.UTF8.GetString(ms.ToArray(), 0, (int)ms.Length);
+                    client.UploadString(_serviceURL + "/Delete", "DELETE", data);
+                }
             }
             else if (!string.IsNullOrEmpty(recover))
             {
-                await Recover(
-                    allTemps: allTemps,
-                    checkboxesTemps: checkboxesTemps);
+                RecoverContract contract = new RecoverContract()
+                {
+                    AllTemps = allTemps ?? "",
+                    CheckboxesTemps = checkboxesTemps
+                };
+
+                using (WebClient client = new WebClient())
+                {
+                    client.Headers["Context-type"] = @"application/xml";
+
+                    MemoryStream ms = new MemoryStream();
+                    DataContractSerializer ser = new DataContractSerializer(typeof(RecoverContract));
+                    ser.WriteObject(ms, contract);
+
+                    client.UploadData(_serviceURL + "/Recover", "PUT", ms.ToArray());
+                }
+
             }
 
-          /*  await _context.SaveChangesAsync();
-
-            model.Temps = await _context.Temps.ToListAsync();
-            model.Rosters = await _context.Rosters.ToListAsync();
-            model.Temps.Sort((t1, t2) => (t1.Jersey ?? 0).CompareTo(t2.Jersey ?? 0));
-            model.Rosters.Sort((t1, t2) => (t1.Jersey ?? 0).CompareTo(t2.Jersey ?? 0));*/
-
-            ViewBag.Positions = GetAllPositions();
-            
-            return View(model);
+            return View(getCritters());
         }
 
-        public async Task Recover(string allTemps, List<string> checkboxesTemps)
-        {
-         /*   IEnumerable<Temp> deletedPlayers = _context.Temps;
-
-            if (!string.IsNullOrEmpty(allTemps))
-            {
-                foreach (var player in deletedPlayers)
-                {
-                    _context.Temps.Remove(player);
-                    await _context.Rosters.AddAsync(player); // implicit operator is optional
-                }
-            
-                return;
-            }
-            
-            if (checkboxesTemps.Count != 0)
-            {
-                foreach (string playerid in checkboxesTemps)
-                {
-                    Temp? player = await _context.Temps.FindAsync(playerid);
-                    if (player != null)
-                    {
-                        await _context.Rosters.AddAsync(player); // implicit operator is optional
-                        _context.Temps.Remove(player);
-                    }
-                }
-            }*/
-        }
-
-        public async Task Delete(DateTime fromDate, DateTime toDate, string position, string allRosters, List<string> checkboxesRosters)
-        {
-           /* IEnumerable<Roster> deletedPlayers = _context.Rosters;
-
-            if(!string.IsNullOrEmpty(allRosters))
-            {
-                foreach (var player in deletedPlayers)
-                {
-                    _context.Rosters.Remove(player);
-                    await _context.Temps.AddAsync(player); // implicit operator is optional
-                }
-
-                return;
-            }
-
-            if (checkboxesRosters.Count != 0)
-            {
-                foreach (string playerid in checkboxesRosters)
-                {
-                    Roster? player = await _context.Rosters.FindAsync(playerid);
-                    if (player != null)
-                    {
-                        await _context.Temps.AddAsync(player); // implicit operator is optional
-                        _context.Rosters.Remove(player);
-                    }
-                }
-
-                return;
-            }
-
-            DateTime defaultDate = new DateTime();
-
-            if (fromDate.Equals(defaultDate) &&
-                toDate.Equals(defaultDate) &&
-                string.IsNullOrEmpty(position))
-                return;
-
-            if (!fromDate.Equals(defaultDate))
-                deletedPlayers = deletedPlayers.Where(player => DateTime.Compare(player.Birthday, fromDate) >= 0);
-
-            if (!toDate.Equals(defaultDate))
-                deletedPlayers = deletedPlayers.Where(player => DateTime.Compare(player.Birthday, toDate) <= 0);
-
-            if (!String.IsNullOrEmpty(position))
-                deletedPlayers = deletedPlayers.Where(player => player.Position == position);
-
-
-            foreach (var player in deletedPlayers)
-            {
-                _context.Rosters.Remove(player);
-                await _context.Temps.AddAsync(player); // implicit operator is optional
-            }*/
-        }
+     
 
     }
 }

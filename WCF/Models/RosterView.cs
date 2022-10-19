@@ -1,12 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace WCF.Models
+namespace Critters.Models
 {
     [DataContract]
-    [KnownType(typeof(Roster))]
-    [KnownType(typeof(Temp))]
-    [KnownType(typeof(DeleteConditions))]
     public class RosterView
     {
         [DataMember]

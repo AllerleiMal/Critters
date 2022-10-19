@@ -1,8 +1,8 @@
 ﻿using System.Data.Entity;
-using WCF.Models;
+using Critters.Models;
 
 
-namespace WCF.Context
+namespace Critters.Context
 {
     public class RosterDbContext : DbContext
     {

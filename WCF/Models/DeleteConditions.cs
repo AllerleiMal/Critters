@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 using System.Web.Mvc;
 
-namespace WCF.Models
+namespace Critters.Models
 {
     [DataContract]
     public class DeleteConditions

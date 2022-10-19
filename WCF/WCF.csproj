@@ -123,6 +123,8 @@
     <Compile Include="IWCFserviceREST.cs" />
     <Compile Include="Models\Critters.cs" />
     <Compile Include="Models\DeleteConditions.cs" />
+    <Compile Include="Models\DeleteContract.cs" />
+    <Compile Include="Models\RecoverContract.cs" />
     <Compile Include="Models\Roster.cs" />
     <Compile Include="Models\RosterView.cs" />
     <Compile Include="Models\Temp.cs" />

@@ -4,8 +4,8 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
-using WCF.Context;
-using WCF.Models;
+using Critters.Context;
+using Critters.Models;
 using System.Threading.Tasks;
 using System.Configuration;
 using System.ServiceModel.Activation;
@@ -16,33 +16,14 @@ namespace WCF
         AspNetCompatibilityRequirementsMode.Allowed)]
     public class WCFserviceREST : IWCFserviceREST
     {
-        public string Foo()
-        {
-            try
-            {
-                using (RosterDbContext context = new RosterDbContext("DefaultConnection"))
-                {
-                    RosterView model = new RosterView();
-                    model.Temps = context.Temps.ToList();
-                    model.Rosters = context.Rosters.ToList();
-                    model.Temps.Sort((t1, t2) => (t1.Jersey ?? 0).CompareTo(t2.Jersey ?? 0));
-                    model.Rosters.Sort((t1, t2) => (t1.Jersey ?? 0).CompareTo(t2.Jersey ?? 0));
 
-                    return model.Rosters.Count.ToString();
-                }
-            } catch(Exception ex)
-            {
-                return "err: " + ex.Message;
-            }
-        }
-
-        public async Task Delete(DateTime fromDate, DateTime toDate, string position, string allRosters, List<string> checkboxesRosters)
+        public async Task<bool> Delete(DeleteContract contract)
         {
-            using (RosterDbContext context = new RosterDbContext(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+            using (RosterDbContext context = new RosterDbContext("DefaultConnection"))
             {
                 IEnumerable<Roster> deletedPlayers = context.Rosters;
 
-                if (!string.IsNullOrEmpty(allRosters))
+                if (!string.IsNullOrEmpty(contract.AllRosters))
                 {
                     foreach (var player in deletedPlayers)
                     {
@@ -52,12 +33,12 @@ namespace WCF
 
                     await context.SaveChangesAsync();
 
-                    return;
+                    return true;
                 }
 
-                if (checkboxesRosters.Count != 0)
+                if (contract.CheckboxesRosters.Count != 0)
                 {
-                    foreach (string playerid in checkboxesRosters)
+                    foreach (string playerid in contract.CheckboxesRosters)
                     {
                         Roster player = await context.Rosters.FindAsync(playerid);
                         if (player != null)
@@ -69,44 +50,50 @@ namespace WCF
 
                     await context.SaveChangesAsync();
 
-                    return;
+                    return true;
                 }
+
+                return false;
             }
         }
 
-        public async Task Recover(string allTemps, List<string> checkboxesTemps)
+        public async Task<bool> Recover(RecoverContract contract)
         {
-            using (RosterDbContext context = new RosterDbContext(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+            using (RosterDbContext context = new RosterDbContext("DefaultConnection"))
             {
                 IEnumerable<Temp> deletedPlayers = context.Temps;
 
-                if (!string.IsNullOrEmpty(allTemps))
+                if (!string.IsNullOrEmpty(contract.AllTemps))
                 {
                     foreach (var player in deletedPlayers)
                     {
                         context.Temps.Remove(player);
-                        context.Rosters.Add(player); // implicit operator is optional
+                        context.Rosters.Add(player);
                     }
 
                     await context.SaveChangesAsync();
 
-                    return;
+                    return true;
                 }
 
-                if (checkboxesTemps.Count != 0)
+                if (contract.CheckboxesTemps.Count != 0)
                 {
-                    foreach (string playerid in checkboxesTemps)
+                    foreach (string playerid in contract.CheckboxesTemps)
                     {
                         Temp player = await context.Temps.FindAsync(playerid);
                         if (player != null)
                         {
-                            context.Rosters.Add(player); // implicit operator is optional
+                            context.Rosters.Add(player);
                             context.Temps.Remove(player);
                         }
                     }
 
                     await context.SaveChangesAsync();
+
+                    return true;
                 }
+
+                return false;
             }
         }
 

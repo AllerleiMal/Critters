@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace WCF.Models
+namespace Critters.Models
 {
     [DataContract]
     public class Critters
