@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Управление общими сведениями о сборке осуществляется посредством следующего 
 // атрибутов. Отредактируйте значения этих атрибутов, чтобы изменить
 // связанные со сборкой.
-[assembly: AssemblyTitle("WCF")]
+[assembly: AssemblyTitle("tempProject")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("WCF")]
+[assembly: AssemblyProduct("tempProject")]
 [assembly: AssemblyCopyright("Copyright ©  2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Указанный ниже идентификатор GUID предназначен для идентификации библиотеки типов, если этот проект будет видимым для COM-объектов
-[assembly: Guid("4daae4c3-e0bd-4a6e-a613-4fac3f95ad69")]
+[assembly: Guid("2c76735b-91f8-4fff-a2e8-1e6213a321c6")]
 
 // Сведения о версии сборки состоят из следующих четырех значений:
 //

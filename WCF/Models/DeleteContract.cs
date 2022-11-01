@@ -9,21 +9,20 @@ namespace Critters.Models
     [DataContract]
     public class DeleteContract
     {
-        [DataMember(Name = "FromDate")]
+        [DataMember]
         public DateTime FromDate { get; set; }
 
-        [DataMember(Name = "ToDate")]
+        [DataMember]
         public DateTime ToDate { get; set; }
 
-        [DataMember(Name = "PositionDate")]
+        [DataMember]
         public string Position { get; set; }
 
-        [DataMember(Name = "AllRosters")]
+        [DataMember]
         public string AllRosters { get; set; }
 
-        [DataMember(Name = "CheckboxesRosters")]
+        [DataMember]
         public List<string> CheckboxesRosters  { get; set; }
-            = new List<string>();
 
         public DeleteContract()
         {

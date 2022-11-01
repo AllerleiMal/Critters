@@ -30,13 +30,8 @@ namespace WCF
                         context.Rosters.Remove(player);
                         context.Temps.Add(player);
                     }
-
-                    await context.SaveChangesAsync();
-
-                    return true;
                 }
-
-                if (contract.CheckboxesRosters.Count != 0)
+                else if (contract.CheckboxesRosters.Count != 0)
                 {
                     foreach (string playerid in contract.CheckboxesRosters)
                     {
@@ -47,36 +42,33 @@ namespace WCF
                             context.Rosters.Remove(player);
                         }
                     }
-
-                    await context.SaveChangesAsync();
-
-                    return true;
                 }
-
-
-                DateTime defaultDate = new DateTime();
-
-                if (contract.FromDate.Equals(defaultDate) &&
-                    contract.ToDate.Equals(defaultDate) &&
-                    string.IsNullOrEmpty(contract.Position))
-                    return false;
-
-                if (!contract.FromDate.Equals(defaultDate))
-                    deletedPlayers = deletedPlayers.Where(player => DateTime.Compare(player.Birthday, contract.FromDate) >= 0);
-
-                if (!contract.ToDate.Equals(defaultDate))
-                    deletedPlayers = deletedPlayers.Where(player => DateTime.Compare(player.Birthday, contract.ToDate) <= 0);
-
-                if (!String.IsNullOrEmpty(contract.Position))
-                    deletedPlayers = deletedPlayers.Where(player => player.Position == contract.Position);
-
-
-                foreach (var player in deletedPlayers)
+                else
                 {
-                    context.Rosters.Remove(player);
-                    context.Temps.Add(player);
-                }
+                    DateTime defaultDate = new DateTime();
 
+                    if (contract.FromDate.Equals(defaultDate) &&
+                        contract.ToDate.Equals(defaultDate) &&
+                        string.IsNullOrEmpty(contract.Position))
+                        return false;
+
+                    if (!contract.FromDate.Equals(defaultDate))
+                        deletedPlayers = deletedPlayers.Where(player => DateTime.Compare(player.Birthday, contract.FromDate) >= 0);
+
+                    if (!contract.ToDate.Equals(defaultDate))
+                        deletedPlayers = deletedPlayers.Where(player => DateTime.Compare(player.Birthday, contract.ToDate) <= 0);
+
+                    if (!String.IsNullOrEmpty(contract.Position))
+                        deletedPlayers = deletedPlayers.Where(player => player.Position == contract.Position);
+
+
+                    foreach (var player in deletedPlayers)
+                    {
+                        context.Rosters.Remove(player);
+                        context.Temps.Add(player);
+                    }
+                }
+                
                 await context.SaveChangesAsync();
                 return true;
             }
@@ -95,13 +87,8 @@ namespace WCF
                         context.Temps.Remove(player);
                         context.Rosters.Add(player);
                     }
-
-                    await context.SaveChangesAsync();
-
-                    return true;
                 }
-
-                if (contract.CheckboxesTemps.Count != 0)
+                else if (contract.CheckboxesTemps.Count != 0)
                 {
                     foreach (string playerid in contract.CheckboxesTemps)
                     {
@@ -112,16 +99,14 @@ namespace WCF
                             context.Temps.Remove(player);
                         }
                     }
-
-                    await context.SaveChangesAsync();
-
-                    return true;
                 }
 
-                return false;
+                await context.SaveChangesAsync();
+
+                return true;
             }
         }
-
+        
         public RosterView GetCritters()
         {
             using (RosterDbContext context = new RosterDbContext("DefaultConnection"))
