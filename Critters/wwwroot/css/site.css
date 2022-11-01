@@ -22,7 +22,6 @@ body {
 .container{
   box-sizing: border-box;
   max-width: 95%;
-  background-color: #aefaff;
 }
 
 .form{

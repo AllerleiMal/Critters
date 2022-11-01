@@ -1,19 +1,19 @@
-﻿using System;
+﻿using Critters.Context;
+using Critters.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
-using System.Text;
-using Critters.Context;
-using Critters.Models;
-using System.Threading.Tasks;
-using System.Configuration;
 using System.ServiceModel.Activation;
+using System.ServiceModel.Web;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace WCF
 {
     [AspNetCompatibilityRequirements(RequirementsMode =
-        AspNetCompatibilityRequirementsMode.Allowed)]
+       AspNetCompatibilityRequirementsMode.Allowed)]
     public class WCFserviceREST : IWCFserviceREST
     {
 
@@ -53,7 +53,32 @@ namespace WCF
                     return true;
                 }
 
-                return false;
+
+                DateTime defaultDate = new DateTime();
+
+                if (contract.FromDate.Equals(defaultDate) &&
+                    contract.ToDate.Equals(defaultDate) &&
+                    string.IsNullOrEmpty(contract.Position))
+                    return false;
+
+                if (!contract.FromDate.Equals(defaultDate))
+                    deletedPlayers = deletedPlayers.Where(player => DateTime.Compare(player.Birthday, contract.FromDate) >= 0);
+
+                if (!contract.ToDate.Equals(defaultDate))
+                    deletedPlayers = deletedPlayers.Where(player => DateTime.Compare(player.Birthday, contract.ToDate) <= 0);
+
+                if (!String.IsNullOrEmpty(contract.Position))
+                    deletedPlayers = deletedPlayers.Where(player => player.Position == contract.Position);
+
+
+                foreach (var player in deletedPlayers)
+                {
+                    context.Rosters.Remove(player);
+                    context.Temps.Add(player);
+                }
+
+                await context.SaveChangesAsync();
+                return true;
             }
         }
 
@@ -102,13 +127,13 @@ namespace WCF
             using (RosterDbContext context = new RosterDbContext("DefaultConnection"))
             {
 
-                    RosterView model = new RosterView();
-                    model.Temps = context.Temps.ToList();
-                    model.Rosters = context.Rosters.ToList();
-                    model.Temps.Sort((t1, t2) => (t1.Jersey ?? 0).CompareTo(t2.Jersey ?? 0));
-                    model.Rosters.Sort((t1, t2) => (t1.Jersey ?? 0).CompareTo(t2.Jersey ?? 0));
+                RosterView model = new RosterView();
+                model.Temps = context.Temps.ToList();
+                model.Rosters = context.Rosters.ToList();
+                model.Temps.Sort((t1, t2) => (t1.Jersey ?? 0).CompareTo(t2.Jersey ?? 0));
+                model.Rosters.Sort((t1, t2) => (t1.Jersey ?? 0).CompareTo(t2.Jersey ?? 0));
 
-                    return model;
+                return model;
             }
         }
     }

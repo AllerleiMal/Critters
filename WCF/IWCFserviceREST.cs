@@ -15,18 +15,15 @@ namespace WCF
     public interface IWCFserviceREST
     {
         [OperationContract]
-       // [XmlSerializerFormat]
         [WebInvoke(Method = "DELETE",
-            UriTemplate = "/Delete",
-            BodyStyle = WebMessageBodyStyle.Bare)]
+            UriTemplate = "/Delete")]
         Task<bool> Delete(DeleteContract contract);
 
         [OperationContract]
         [WebInvoke(Method = "PUT",
             ResponseFormat = WebMessageFormat.Xml,
             UriTemplate = "/Recover",
-            RequestFormat = WebMessageFormat.Xml,
-            BodyStyle = WebMessageBodyStyle.Bare)]
+            RequestFormat = WebMessageFormat.Xml)]
         Task<bool> Recover(RecoverContract contract);
 
         [OperationContract]
