@@ -53,7 +53,32 @@ namespace tempProject
                     return true;
                 }
 
-                return false;
+                
+                DateTime defaultDate = new DateTime();
+
+                if (contract.FromDate.Equals(defaultDate) &&
+                    contract.ToDate.Equals(defaultDate) &&
+                    string.IsNullOrEmpty(contract.Position))
+                    return false;
+
+                if (!contract.FromDate.Equals(defaultDate))
+                    deletedPlayers = deletedPlayers.Where(player => DateTime.Compare(player.Birthday, contract.FromDate) >= 0);
+
+                if (!contract.ToDate.Equals(defaultDate))
+                    deletedPlayers = deletedPlayers.Where(player => DateTime.Compare(player.Birthday, contract.ToDate) <= 0);
+
+                if (!String.IsNullOrEmpty(contract.Position))
+                    deletedPlayers = deletedPlayers.Where(player => player.Position == contract.Position);
+
+
+                foreach (var player in deletedPlayers)
+                {
+                    context.Rosters.Remove(player);
+                    context.Temps.Add(player);
+                }
+                
+                await context.SaveChangesAsync();
+                return true;
             }
         }
 
