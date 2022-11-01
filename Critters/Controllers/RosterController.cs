@@ -16,7 +16,7 @@ namespace Critters.Controllers
         private readonly List<SelectListItem> _positions;
         public RosterController()
         {
-            _serviceURL = "http://localhost:49974/WCFserviceREST.svc";
+            _serviceURL = "http://localhost:51215/WCFserviceREST.svc";
             _positions = new List<SelectListItem>
             {
                 new("RW", "RW"),
