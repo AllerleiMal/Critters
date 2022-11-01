@@ -17,7 +17,7 @@ namespace Critters.Controllers
         private readonly List<SelectListItem> _positions;
         public RosterController()
         {
-            _serviceURL = "http://localhost:49974/WCFserviceREST.svc";
+            _serviceURL = "http://localhost:51215/WCFserviceREST.svc";
             _positions = new List<SelectListItem>
             {
                 new("RW", "RW"),
@@ -43,7 +43,7 @@ namespace Critters.Controllers
             using (WebClient proxy = new WebClient())
             {
                 DataContractSerializer ser = new DataContractSerializer(typeof(RosterView));
-                proxy.Headers["Context-type"] = @"application/xml";
+                // proxy.Headers["Context-type"] = @"application/xml";
                 byte[] data = proxy.DownloadData(_serviceURL + "/GetCritters");
                 RosterView model = (ser.ReadObject(new MemoryStream(data)) as RosterView)!;
 
@@ -69,13 +69,13 @@ namespace Critters.Controllers
 
                 using (WebClient client = new WebClient())
                 {
-                    client.Headers["Context-type"] = @"application/xml";
+                    client.Headers["Content-type"] = @"application/xml";
 
                     MemoryStream ms = new MemoryStream();
                     DataContractSerializer ser = new DataContractSerializer(typeof(DeleteContract));
                     ser.WriteObject(ms, contract);
                     string data = Encoding.UTF8.GetString(ms.ToArray(), 0, (int)ms.Length);
-                    client.UploadString(_serviceURL + "/Delete", "DELETE", data);
+                    client.UploadData(_serviceURL + "/Delete", "DELETE", ms.ToArray());
                 }
             }
             else if (!string.IsNullOrEmpty(recover))
@@ -88,7 +88,7 @@ namespace Critters.Controllers
 
                 using (WebClient client = new WebClient())
                 {
-                    client.Headers["Context-type"] = @"application/xml";
+                    client.Headers["Content-type"] = @"application/xml";
 
                     MemoryStream ms = new MemoryStream();
                     DataContractSerializer ser = new DataContractSerializer(typeof(RecoverContract));
